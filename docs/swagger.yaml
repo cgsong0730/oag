@@ -1,0 +1,49 @@
+basePath: /
+definitions:
+  main.User:
+    type: object
+host: localhost:5000
+info:
+  contact: {}
+  title: Open API Gateway
+  version: "1.0"
+paths:
+  /show:
+    get:
+      consumes:
+      - application/json
+      description: Get show result
+      parameters:
+      - description: name of the user
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Get show
+  /user/{name}:
+    get:
+      consumes:
+      - application/json
+      description: Get user's info
+      parameters:
+      - description: name of the user
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+      summary: Get user
+swagger: "2.0"

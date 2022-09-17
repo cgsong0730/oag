@@ -1,0 +1,25 @@
+# oag
+
+install swagger
+
+```
+go get github.com/swaggo/swag/cmd/swag
+go get github.com/swaggo/echo-swagger
+```
+
+create swagger doc
+
+```
+swag init
+```
+
+create mod and vendor
+```
+go mod init
+go mod vendor
+```
+
+build oag
+```
+make
+```
