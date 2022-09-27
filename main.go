@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	_ "oag/docs"
-	"strconv"
 	"time"
 
 	mongodb "oag/lib/mongodb"
@@ -191,7 +190,7 @@ func forestPoint(c echo.Context) error {
 				isEqual = true
 				openApiList[i].count++
 				cnt = child.count
-				if cnt == 5 {
+				if cnt == 30 {
 					mongodb.CreateData(strParams, string(jsonData))
 				}
 			}
@@ -205,7 +204,8 @@ func forestPoint(c echo.Context) error {
 			openApiList = append(openApiList, newOpenApi)
 		}
 
-		returnStr = "count:" + strconv.Itoa(cnt) + "\n" + string(jsonData)
+		//returnStr = "count:" + strconv.Itoa(cnt) + "\n" + string(jsonData)
+		returnStr = string(jsonData)
 	}
 
 	return c.String(http.StatusOK, returnStr)
