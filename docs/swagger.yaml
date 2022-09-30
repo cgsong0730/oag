@@ -1,49 +1,52 @@
 basePath: /
-definitions:
-  main.User:
-    type: object
 host: localhost:5000
 info:
   contact: {}
-  title: Open API Gateway
+  description: API Gateway for QoS Assurance of Open API Based Application
+  title: OAG(Open API Gateway)
   version: "1.0"
 paths:
-  /show:
+  /forestFires:
     get:
       consumes:
-      - application/json
-      description: Get show result
-      parameters:
-      - description: name of the user
-        in: path
-        name: name
-        required: true
-        type: string
+      - text/html
+      description: Get forestFires data.
       produces:
-      - application/json
+      - text/html
       responses:
         "200":
           description: ok
           schema:
             type: string
-      summary: Get show
-  /user/{name}:
+  /forestPoint:
     get:
       consumes:
-      - application/json
-      description: Get user's info
-      parameters:
-      - description: name of the user
-        in: path
-        name: name
-        required: true
-        type: string
+      - text/html
+      description: Get forestPoint data.
       produces:
-      - application/json
+      - text/html
       responses:
         "200":
-          description: OK
+          description: ok
           schema:
-            $ref: '#/definitions/main.User'
-      summary: Get user
+            type: string
+  /forestfire:
+    get:
+      consumes:
+      - text/html
+      - application/xhtml+xml
+      - application/xml;q=0.9
+      - image/avif
+      - image/webp
+      - image/apng
+      - '*/*;q=0.8'
+      - application/signed-exchange;v=b3;q=0.9
+      description: Get forestfire data.
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
 swagger: "2.0"

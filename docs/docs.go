@@ -16,24 +16,14 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/show": {
+        "/forestFires": {
             "get": {
-                "description": "Get show result",
+                "description": "Get forestFires data.",
                 "consumes": [
-                    "application/json"
+                    "text/html"
                 ],
                 "produces": [
-                    "application/json"
-                ],
-                "summary": "Get show",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "name of the user",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
@@ -45,39 +35,50 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{name}": {
+        "/forestPoint": {
             "get": {
-                "description": "Get user's info",
+                "description": "Get forestPoint data.",
                 "consumes": [
-                    "application/json"
+                    "text/html"
                 ],
                 "produces": [
-                    "application/json"
-                ],
-                "summary": "Get user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "name of the user",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/main.User"
+                            "type": "string"
                         }
                     }
                 }
             }
-        }
-    },
-    "definitions": {
-        "main.User": {
-            "type": "object"
+        },
+        "/forestfire": {
+            "get": {
+                "description": "Get forestfire data.",
+                "consumes": [
+                    "text/html",
+                    "application/xhtml+xml",
+                    "application/xml;q=0.9",
+                    "image/avif",
+                    "image/webp",
+                    "image/apng",
+                    "*/*;q=0.8",
+                    "application/signed-exchange;v=b3;q=0.9"
+                ],
+                "produces": [
+                    "text/html"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     }
 }`
@@ -88,8 +89,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:5000",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Open API Gateway",
-	Description:      "",
+	Title:            "OAG(Open API Gateway)",
+	Description:      "API Gateway for QoS Assurance of Open API Based Application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

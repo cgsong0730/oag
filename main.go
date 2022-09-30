@@ -10,6 +10,7 @@ import (
 
 	mongodb "oag/lib/mongodb"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
@@ -75,9 +76,10 @@ type Params struct {
 var client http.Client
 var openApiList []OpenApi
 
-// @title Open API Gateway
+// @title OAG(Open API Gateway)
 // @version 1.0
 // @host localhost:5000
+// @description API Gateway for QoS Assurance of Open API Based Application
 // @BasePath /
 func main() {
 
@@ -94,39 +96,97 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
-	e.GET("/users/:id", getUser)
-	e.GET("/show", show)
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.GET("/forestPoint", forestPoint)
+	e.GET("/forestfire", forestfire)
+	e.GET("/forestFires", forestFires)
 
 	e.Logger.Fatal(e.Start(":5000"))
 }
 
-// @Summary Get user
-// @Description Get user's info
-// @Accept json
-// @Produce json
-// @Param name path string true "name of the user"
-// @Success 200 {object} User
-// @Router /user/{name} [get]
-func getUser(c echo.Context) error {
-	id := c.Param("id")
-	return c.String(http.StatusOK, id)
-}
-
-// @Summary Get show
-// @Description Get show result
-// @Accept json
-// @Produce json
-// @Param name path string true "name of the user"
+// @Summery Get forestfire
+// @Description Get forestfire data.
+// @Accept text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+// @Produce text/html
 // @Success 200 {string} string "ok"
-// @Router /show [get]
-func show(c echo.Context) error {
-	team := c.QueryParam("team")
-	member := c.QueryParam("member")
-	return c.String(http.StatusOK, "team:"+team+", member:"+member)
+// @Router /forestfire [get]
+func forestfire(c echo.Context) error {
+	url := "http://forestfire.nifos.go.kr/main.action"
+	resp, err := client.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	html, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return err
+	}
+	wrapper := html.Find("div.main_section_1")
+	//subwrapper := wrapper.Find("div.thumb")
+	items := wrapper.Find("li.item")
+
+	resultStr := ""
+	items.Each(func(idx int, sel *goquery.Selection) {
+		if idx == 5 {
+			img := sel.Find("img")
+			src, exists := img.Attr("src")
+			if exists {
+				resultStr += "http://forestfire.nifos.go.kr" + src[2:]
+			}
+		}
+	})
+	nresp, err := client.Get(resultStr)
+	if err != nil {
+		return err
+	}
+	data, err := ioutil.ReadAll(nresp.Body)
+	if err != nil {
+		return err
+	}
+	return c.String(http.StatusOK, string(data))
 }
 
+// @Summery Get forestFires
+// @Description Get forestFires data.
+// @Accept text/html
+// @Produce text/html
+// @Success 200 {string} string "ok"
+// @Router /forestFires [get]
+func forestFires(c echo.Context) error {
+	url := "https://d.kbs.co.kr/now/forestFires"
+	resp, err := client.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	html, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return err
+	}
+	wrapper := html.Find("div.todayArea")
+	items := wrapper.Find("span")
+
+	resultStr := ""
+
+	items.Each(func(idx int, sel *goquery.Selection) {
+		if idx == 0 {
+			resultStr += sel.Text()
+		} else {
+			resultStr += "," + sel.Text()
+		}
+	})
+
+	return c.String(http.StatusOK, resultStr)
+}
+
+// @Summery Get forestPoint
+// @Description Get forestPoint data.
+// @Accept text/html
+// @Produce text/html
+// @Success 200 {string} string "ok"
+// @Router /forestPoint [get]
 func forestPoint(c echo.Context) error {
 	url := "http://apis.data.go.kr/1400377/forestPoint/forestPointListGeongugSearch"
 	key := "rsUsTZ5iD6e8vRno%2FpcvXuBJVdP4aYUwcONc0xcsPbGjHkCNpMnobuQb8ZcuAd7%2BrjqNlreQU9907P7OHW8N%2Fw%3D%3D&"

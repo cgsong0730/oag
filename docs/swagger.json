@@ -1,31 +1,22 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Open API Gateway",
+        "description": "API Gateway for QoS Assurance of Open API Based Application",
+        "title": "OAG(Open API Gateway)",
         "contact": {},
         "version": "1.0"
     },
     "host": "localhost:5000",
     "basePath": "/",
     "paths": {
-        "/show": {
+        "/forestFires": {
             "get": {
-                "description": "Get show result",
+                "description": "Get forestFires data.",
                 "consumes": [
-                    "application/json"
+                    "text/html"
                 ],
                 "produces": [
-                    "application/json"
-                ],
-                "summary": "Get show",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "name of the user",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
@@ -37,39 +28,50 @@
                 }
             }
         },
-        "/user/{name}": {
+        "/forestPoint": {
             "get": {
-                "description": "Get user's info",
+                "description": "Get forestPoint data.",
                 "consumes": [
-                    "application/json"
+                    "text/html"
                 ],
                 "produces": [
-                    "application/json"
-                ],
-                "summary": "Get user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "name of the user",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/main.User"
+                            "type": "string"
                         }
                     }
                 }
             }
-        }
-    },
-    "definitions": {
-        "main.User": {
-            "type": "object"
+        },
+        "/forestfire": {
+            "get": {
+                "description": "Get forestfire data.",
+                "consumes": [
+                    "text/html",
+                    "application/xhtml+xml",
+                    "application/xml;q=0.9",
+                    "image/avif",
+                    "image/webp",
+                    "image/apng",
+                    "*/*;q=0.8",
+                    "application/signed-exchange;v=b3;q=0.9"
+                ],
+                "produces": [
+                    "text/html"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     }
 }
